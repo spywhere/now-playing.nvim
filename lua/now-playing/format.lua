@@ -2,32 +2,18 @@ return function ()
   local F = {}
   local text_components = {}
 
-  local prequire = function (...)
-    local status, mod = pcall(require, ...)
-    if status then
-      return mod
-    else
-      return nil
-    end
+  local substr = function (text, begin_index, end_index)
+    local codepoints = vim.str_utf_pos(text)
+
+    local last_byte_size = vim.str_utf_end(text, codepoints[end_index])
+    return string.sub(
+      text,
+      codepoints[begin_index],
+      codepoints[end_index] + last_byte_size
+    )
   end
-
-  local substr = string.sub
-  local strlen = string.len
-  local utf8 = prequire('utf8')
-  if utf8 then
-    substr = function (text, begin_index, end_index)
-      local length = utf8.len(text)
-      local end_offset = string.len(text)
-
-      if end_index < length then
-        end_offset = utf8.offset(text, end_index + 1) - 1
-      end
-
-      return string.sub(text, utf8.offset(text, begin_index), end_offset)
-    end
-    strlen = function (text)
-      return utf8.len(text)
-    end
+  local strlen = function (text)
+    return #vim.str_utf_pos(text)
   end
 
   local set = function (tbl, key, val)
