@@ -30,13 +30,13 @@ There are couple of ways to use `.format` to customize the status text
 
 For a static, basic custom format, simply passed a string similar to
 `string.format`, this would just replace all the placeholder with correspond
-data
+data (see Available Information below)
 
 ```lua
 require('now-playing').format('%s - %s', 'artist', 'title')
 ```
 
-Also, this is simply a shorthand version of following setup (see Format
+Also, this is simply a shorthand version of the following setup (see Format
 Functions for more details on `.format`)...
 
 ```lua
@@ -59,7 +59,7 @@ require('now-playing').format(function (format)
 end)
 ```
 
-You can also use all available format functions below to customize a status
+You can also use all available Format Functions below to customize a status
 text to your desire
 
 #### Default Format
@@ -99,7 +99,29 @@ M.status = function (format)
 end
 ```
 
-#### Format Functions
+#### Format Functions (to be documented)
+
+The following methods are only available in an object instantiated from a
+format builder.
+
+```lua
+function (format)
+  local format_object = format()
+  -- calling method separately does not instantiate a new format
+  local format1 = format_object.static('hello')
+  local format2 = format_object.static('world')
+  -- format_object, format1 and format2 are the same object here
+  --   so, the output will simply be 'helloworld'
+
+  -- instantiate a new object will create a new format
+  local format3 = format().static('hello')
+  local format4 = format().static('world')
+  -- format3 and format4 is a different object
+  --  so, the output will be
+  --    format3 = 'hello'
+  --    format4 = 'world'
+end
+```
 
 - `.static`
 - `.format`
@@ -107,3 +129,35 @@ end
 - `.time`
 - `.duration`
 - `.scrollable`
+
+### API (to be documented)
+
+- `.format` (see Custom Format above)
+- `.get`
+- `.is_running`
+- `.is_playing`
+
+### Available Information
+
+All information will be returned when play or paused a track, otherwise an
+empty string will be used instead
+
+- `title`: A title of currently playing track
+- `artist`: An artist of currently playing track
+- `position`: A playing position in seconds of currently playing track
+- `duration`: A total duration in seconds of currently playing track
+- `state`: A playing state (`playing`, `paused`)
+- `app`: A music player name
+
+### Cross Plugin Interaction (to be documented)
+
+now-playing.nvim can be setup so it work with tmux-now-playing seamlessly.
+
+Both plugin will set the status based on how plugin are running on both apps.
+
+When both installed and setup, tmux-now-playing will take over first and set
+a tmux status to show a currently playing track. Once neovim is opened and
+now-playing.nvim requested to take over, tmux-now-playing will switch its
+status to a shared session one (default to empty string, which simply hide
+the playing status). And once neovim is closed, in a few seconds,
+tmux-now-playing will take control of the status back to tmux
