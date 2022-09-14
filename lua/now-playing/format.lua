@@ -56,20 +56,21 @@ return function ()
 
   local scroll = function (text, offset, length, separator)
     local text_length = strlen(text)
-    if text_length < length then
+    if text_length <= length then
       return text, false
     end
+    text = text .. (separator or '')
+    text_length = strlen(text)
 
     local adjusted_offset = offset % text_length
     local output = substr(
       text,
       adjusted_offset + 1,
-      math.min(adjusted_offset + 1 + length, text_length)
+      math.min(adjusted_offset + length, text_length)
     )
 
     local remaining = length - strlen(output)
     while remaining > 0 do
-      output = output .. (separator or '')
       if text_length <= remaining then
         output = output .. text
       else
