@@ -1,3 +1,5 @@
+local shada = require('now-playing.shada')
+
 local M = {}
 local P = {
   enable = false,
@@ -88,21 +90,15 @@ P.fetch = function ()
 end
 
 M.take_over = function ()
-  if vim.env.NOW_PLAYING_SHADA then
-    if vim.fn.filereadable(vim.env.NOW_PLAYING_SHADA) == 1 then
-      local shada=vim.fn.readfile(vim.env.NOW_PLAYING_SHADA, '', 2)
-
-      if shada[2] and os.time() < tonumber(shada[2]) + 5 then
-        return
-      end
-    end
-
-    vim.fn.writefile(
-      { 'nvim', string.format('%s', os.time()) },
-      vim.env.NOW_PLAYING_SHADA,
-      'b'
-    )
+  if not vim.env.NOW_PLAYING_SHADA then
+    return false
   end
+
+  local options = {
+    app = P.app,
+    priority = P.priority
+  }
+  return shada.has_shared_session(options)
 end
 
 M.get = function (key)
@@ -190,12 +186,16 @@ M.setup = function (options)
     polling_interval = 5000,
     playing_interval = 1000,
     timeout = 100,
-    autostart = true
+    autostart = true,
+    app = 'nvim',
+    priority = 1
   })
 
   P.polling_interval = opts.polling_interval
   P.playing_interval = opts.playing_interval
   P.timeout = opts.timeout
+  P.app = opts.app
+  P.priority = opts.priority
 
   if opts.autostart then
     M.enable()
