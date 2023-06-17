@@ -77,6 +77,10 @@ P.fetch = function ()
     P.data = nil
   end
 
+  if P.redraw then
+    vim.cmd('redrawstatus')
+  end
+
   local interval = P.polling_interval
   if M.is_playing() then
     interval = P.playing_interval
@@ -188,7 +192,8 @@ M.setup = function (options)
     timeout = 100,
     autostart = true,
     app = 'nvim',
-    priority = 1
+    priority = 1,
+    redraw = false
   })
 
   P.polling_interval = opts.polling_interval
@@ -196,6 +201,7 @@ M.setup = function (options)
   P.timeout = opts.timeout
   P.app = opts.app
   P.priority = opts.priority
+  P.redraw = opts.redraw
 
   if opts.autostart then
     M.enable()
