@@ -6,7 +6,8 @@ Show currently playing track in neovim status bar
 
 ## Integrations
 
-- (macOS only) `osascript` (AppleScript) - enable the following integrations and more in the future
+- (macOS only) `osascript` (AppleScript) - enable the following integrations
+and more in the future
   - Spotity
   - iTunes / Music
 - `mpd` ([Music Player Daemon](https://www.musicpd.org)) through `nc` (netcat)
@@ -18,6 +19,36 @@ Simply add the following snippets to your favourite status bar manager
 ```lua
 local now_playing = require('now-playing')
 now_playing.format(now_playing.status)
+```
+
+### Additional Customizations
+
+To adjust the plugin-wise configurations, use `.setup` with the configurations
+you want to adjust. The following are all available configurations and its
+default value
+
+```lua
+require('now-playing').setup {
+  -- interval in milliseconds for polling for music data
+  polling_interval = 5000,
+  -- interval in milliseconds for polling for music data during play
+  playing_interval = 1000,
+  -- maximum duration in milliseconds to allow music data polling per interval
+  timeout = 100,
+  -- start the polling automatically (using the above timings)
+  autostart = true,
+  -- application name to be used in a cross plugin interaction
+  app = 'nvim',
+  -- application priority to be used in a cross plugin interaction
+  priority = 1,
+  -- force redraw a status line after data fetching
+  redraw = false,
+  -- customize a playing state icon, any missing state will use a 'default' one
+  icon = {
+    default = ' ',
+    playing = '>'
+  }
+}
 ```
 
 ### Custom Format
@@ -82,6 +113,7 @@ M.status = function (format)
       '%s ',
       format()
         .map('state', {
+          -- these icons are taken from the configuration
           playing = '>'
         }, ' ')
     )

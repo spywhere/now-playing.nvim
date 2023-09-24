@@ -10,7 +10,11 @@ local P = {
   },
   data = nil,
   dynamic_interval = 0,
-  interval_samples = 0
+  interval_samples = 0,
+  icon = {
+    default = ' ',
+    playing = '>'
+  }
 }
 
 P.iterate = function (list, callback)
@@ -166,9 +170,7 @@ M.status = function (format)
     .format(
       '%s ',
       format()
-        .map('state', {
-          playing = '>'
-        }, ' ')
+        .map('state', P.icon, P.icon and P.icon.default or ' ')
     )
     .scrollable(
       25,
@@ -193,7 +195,11 @@ M.setup = function (options)
     autostart = true,
     app = 'nvim',
     priority = 1,
-    redraw = false
+    redraw = false,
+    icon = {
+      default = ' ',
+      playing = '>'
+    }
   })
 
   P.polling_interval = opts.polling_interval
@@ -202,6 +208,7 @@ M.setup = function (options)
   P.app = opts.app
   P.priority = opts.priority
   P.redraw = opts.redraw
+  P.icon = opts.icon
 
   if opts.autostart then
     M.enable()
