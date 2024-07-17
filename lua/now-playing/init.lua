@@ -4,10 +4,10 @@ local M = {}
 local P = {
   enable = false,
   players = {
+    'nowplaying-cli',
     'mpd',
     'applescript',
-    'cscript',
-    'nowplaying-cli'
+    'cscript'
   },
   data = nil,
   dynamic_interval = 0,
