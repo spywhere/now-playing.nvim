@@ -6,7 +6,8 @@ local P = {
   players = {
     'mpd',
     'applescript',
-    'cscript'
+    'cscript',
+    'nowplaying-cli'
   },
   data = nil,
   dynamic_interval = 0,
