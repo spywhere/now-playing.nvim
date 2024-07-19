@@ -11,9 +11,19 @@ M.get_data = function (callback, shell)
   end
 
   local is_running = function (cb)
-    shell.run(cmd('playbackRate'), function (result)
+    shell.run(cmd('playbackRate', 'isMusicApp'), function (result)
       local output = result.stdout
-      if output == 'null' then
+      if output == '' then
+        return callback()
+      end
+
+      local parts = vim.split(output, '\n', { plain = true })
+      -- skip if not playing
+      if parts[1] == 'null' then
+        return callback()
+      end
+      -- skip music app
+      if parts[2] == '1' then
         return callback()
       end
 
