@@ -46,8 +46,8 @@ M.get_data = function (callback, shell)
 
       return callback {
         state = state and 'playing' or 'paused',
-        position = math.floor(result.info.currentPlaybackTime),
-        duration = math.floor(result.info.durationInMillis / 1000),
+        position = math.floor(result.info.currentPlaybackTime or 0),
+        duration = math.floor((result.info.durationInMillis or 0) / 1000),
         title = result.info.name,
         artist = result.info.artistName,
       }
