@@ -11,6 +11,7 @@ and more in the future
   - Spotity
   - iTunes / Music
 - `mpd` ([Music Player Daemon](https://www.musicpd.org)) through `nc` (netcat)
+- [Cider](https://cider.sh) through `curl`
 - [`nowplaying-cli`](https://github.com/kirtan-shah/nowplaying-cli)
 
 ## Configurations

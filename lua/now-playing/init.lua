@@ -5,6 +5,7 @@ local P = {
   enable = false,
   players = {
     'nowplaying-cli',
+    'cider',
     'mpd',
     'applescript',
     'cscript'
