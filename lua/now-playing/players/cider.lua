@@ -40,6 +40,9 @@ M.get_data = function (callback, shell)
 
   local get_status = function (state)
     curl('/now-playing', function (result)
+      if not result.info then
+        return callback()
+      end
       if not state and result.info.currentPlaybackTime == nil then
         return callback()
       end
